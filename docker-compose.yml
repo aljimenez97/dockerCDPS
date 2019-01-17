@@ -1,0 +1,71 @@
+version: '2'
+services:
+  c1:
+    build: ./CX  #use local version
+    container_name: "c1"
+    networks:
+      client-fw:
+        ipv4_address: "20.2.1.11"
+  fw:
+    build: ./FW  #use local version
+    container_name: "fw"
+    networks:
+      client-fw:
+        ipv4_address: "20.2.1.1"
+      fw-lb:
+        ipv4_address: "20.2.2.1"
+  lb:
+    build: ./LB  #use local version
+    container_name: "lb"
+    networks:
+      fw-lb:
+        ipv4_address: "20.2.2.2"
+      lb-server:
+        ipv4_address: "20.2.3.1"
+  s1:
+    build: ./SX  #use local version
+    container_name: "s1"
+    depends_on:
+      - bd
+    networks:
+      lb-server:
+        ipv4_address: "20.2.3.11"
+      server-bd:
+        ipv4_address: "20.2.4.11"
+    volumes:
+      - nas:/quiz_2019/public/uploads
+  bd:
+    build: ./BD  #use local version
+    container_name: "bd"
+    networks:
+      server-bd:
+        ipv4_address: "20.2.4.31"
+    ports:
+      - "3306:3306"
+networks:
+  client-fw:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 20.2.1.0/24
+         gateway: 20.2.1.70
+  fw-lb:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 20.2.2.0/24
+          gateway: 20.2.2.70
+  lb-server:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 20.2.3.0/24
+         gateway: 20.2.3.70
+  server-bd:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 20.2.4.0/24
+         gateway: 20.2.4.70
+volumes:
+  nas:
