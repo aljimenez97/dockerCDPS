@@ -87,3 +87,24 @@ Docker containers are designed to be ephemeral. This implies that they can be st
 CMD sleep 100000000000000000000
 ```
 Please note **this is not a propper solution** but still works for testing purposes
+
+### Storage service
+In an attempt to simplify the project structure, we have substituted the NAS system by the use od Docker native volumes. The counterpart is that we have no storage replication. This might be further researched in the future.
+The advantage of docker volumes is its simplicity. We just define the volume in the *compose* file:
+```
+volumes:
+  nas:
+```
+And then specify the route of the volume in the containers that will use it. For example:
+```
+s4:
+    build: ./S4  #use local version
+    container_name: "s4"
+    networks:
+      lb-server:
+        ipv4_address: "20.2.3.14"
+      server-bd:
+        ipv4_address: "20.2.4.14"
+    volumes:
+      - nas:/quiz_2019/public/uploads 
+```
