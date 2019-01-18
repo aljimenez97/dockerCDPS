@@ -1,5 +1,10 @@
 # dockerCDPS
 Implementation of final scenario (pfinal) using docker-compose for learning purpose.
+![alt scenario](https://github.com/aljimenez97/dockerCDPS/blob/master/github-resources/scenario.png)
+Source: *Práctica Final: Despliegue de una aplicación escalable (CDPS 2018-2019)*
+
+Related repos:
+https://github.com/CORE-UPM/quiz_2019
 
 ## Simplifications 
 - Instead of NAS servers, we aim to use docker native **volumes**.
