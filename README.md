@@ -1,12 +1,9 @@
 # dockerCDPS
-Implementation of final scenery using docker-compose
+Implementation of final scenario (pfinal) using docker-compose for learning purpose.
 
 # Simplifications 
-- We are implementing just one server for now
 - Instead of NAS servers, we aim to use docker volumes.
+- No FireWall conatainer will be set up. By carefully defining the internal networks docker itself publishes the expected iptables. We will have to take into account those ports being published to the external network (host) and only expose internally those that are not meant to be accessed from the outside, such us the database port (3306).
 
-# Achievements
-- Topology network has been defined in docker-compose file, as so have been lb, fw, s1, bd and c1 machines.
-- s1 container waits for database to be ready, but migrating and seeding are just working by manually execution (docker-compose run s1 npm run-script migrate_cdps)
-- bd does not stop after execution of Dockerfile (we had trouble with Docker ephemeral philosophy in this respect)
-# To Do
+# Major problems encountered
+
