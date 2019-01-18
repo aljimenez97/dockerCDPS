@@ -83,3 +83,7 @@ It ensures the database is reachable and running and after that migrates and see
 
 ### Docker ephemeral philosophy 
 Docker containers are designed to be ephemeral. This implies that they can be stopped and destroyed and then substituted by another container. In the case of our Dockerfiles, we noticed that some machines, such as the clients, exited as soon as *docker-compose up* command finished. This was due to the lack of an *ENTRYPOINT* or *CMD* being executed in the foreground that kept the machine running. **This is Docker expected behaviour**. We forced the client container to keep running by adding a *sleep* command in the Dockerfile
+```
+CMD sleep 100000000000000000000
+```
+**This is not a propper solution but still works for testing purposes**
