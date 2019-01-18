@@ -20,7 +20,9 @@ cd dockerCDPS
 docker-compose up
 ```
 It will take a while for the last command to finish. Once it does, the service should be running. The easiest way to check it is browsing http://localhost:3000, for we defined in the compose file that the service would map the internal port 80 of the load balancer to port 3000 of the host machine. 
- Another alternative is to access the service through Docker container *c1* (client)
+![alt safari](https://github.com/aljimenez97/dockerCDPS/blob/master/github-resources/safari.png)
+
+Another alternative is to access the service through Docker container *c1* (client)
  ```
 docker exec -it c1 /bin/bash
 ```
