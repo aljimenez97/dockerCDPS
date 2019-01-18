@@ -34,5 +34,33 @@ Note that 20.2.0.1 corresponds to the interface of the load balancer the client 
 ![alt curl output](https://github.com/aljimenez97/dockerCDPS/blob/master/github-resources/curl.png)
 
 ## Major problems encountered
-- **Synchronization of containers**. Some processes depend on the state of others. For instance, our servers cannot populate the database if the latter is not initialized and running on the expected port. Another case is the load balancing service, which needs to wait for the quiz servers to be ready in order to initialize.
-- **Docker ephemeral philosophy**. Docker containers are designed to be ephemeral. This implies that they can be stopped and destroyed and then substituted by another container. In the case of our Dockerfiles, we noticed that some machines, such as the clients, exited as soon as *docker-compose up* command finished. This was due to the lack of an *ENTRYPOINT* or *CMD* being executed in the foreground that kept the machine running. **This is Docker expected behaviour**. We forced the client container to keep running by adding a *sleep* command in the Dockerfile
+### Synchronization of containers
+Some processes depend on the state of others. For instance, our servers cannot populate the database if the latter is not initialized and running on the expected port. Another case is the load balancing service, which needs to wait for the quiz servers to be ready in order to initialize.
+In this cases we need to verify that some containers are running and that the services needed are available. 
+
+**Container synchronization** is achieved by adding *depends_on* tags on the docker compose file. For instance, in the LB example:
+```
+lb:
+    build: ./LB  #use local version
+    container_name: "lb"
+    ports:
+      - "3000:80"
+    depends_on:
+      - s1
+      - s2
+      - s3
+      - s4
+```
+This will load the quiz server containers before launching the load balancer.
+
+**Service synchronization** is achieved by running checking script as entrypoints of those containers that need a service to work. For instance, the quiz server Dockerfile defines: 
+```
+# Copy script
+COPY docker-entrypoint.sh /opt/docker-entrypoint.sh
+RUN chmod 755 /opt/docker-entrypoint.sh
+
+ENTRYPOINT ["/opt/docker-entrypoint.sh"]
+```
+
+### Docker ephemeral philosophy 
+Docker containers are designed to be ephemeral. This implies that they can be stopped and destroyed and then substituted by another container. In the case of our Dockerfiles, we noticed that some machines, such as the clients, exited as soon as *docker-compose up* command finished. This was due to the lack of an *ENTRYPOINT* or *CMD* being executed in the foreground that kept the machine running. **This is Docker expected behaviour**. We forced the client container to keep running by adding a *sleep* command in the Dockerfile
