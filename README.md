@@ -36,7 +36,7 @@ Note that 20.2.0.1 corresponds to the interface of the load balancer the client 
 ## Major problems encountered
 ### Synchronization of containers
 Some processes depend on the state of others. For instance, our servers cannot populate the database if the latter is not initialized and running on the expected port. Another case is the load balancing service, which needs to wait for the quiz servers to be ready in order to initialize.
-In this cases we need to verify that some containers are running and that the services needed are available. 
+In these cases we need to verify that some containers are running and that the services needed are available. 
 
 **Container synchronization** is achieved by adding *depends_on* tags on the docker compose file. For instance, in the LB example:
 ```
