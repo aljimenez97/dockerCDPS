@@ -86,4 +86,4 @@ Docker containers are designed to be ephemeral. This implies that they can be st
 ```
 CMD sleep 100000000000000000000
 ```
-**This is not a propper solution but still works for testing purposes**
+Please note **this is not a propper solution** but still works for testing purposes
