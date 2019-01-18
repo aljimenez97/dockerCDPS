@@ -90,7 +90,7 @@ Please note **this is not a propper solution** but still works for testing purpo
 
 ### Storage service
 In an attempt to simplify the project structure, we have substituted the NAS system by the use od Docker native volumes. The counterpart is that we have no storage replication. This might be further researched in the future.
-The advantage of docker volumes is its simplicity. We just define the volume in the *compose* file:
+The advantage of docker volumes is their simplicity. We just define the volume in the *compose* file:
 ```
 volumes:
   nas:
