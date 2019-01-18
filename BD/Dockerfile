@@ -20,5 +20,12 @@ RUN service mysql restart && \
     mysql -u root --password='xxxx' -e "GRANT ALL PRIVILEGES ON quiz.* TO 'quiz'@'%' IDENTIFIED by 'xxxx';" && \
     mysql -u root --password='xxxx' -e "FLUSH PRIVILEGES;"
 
-EXPOSE 3306
 
+
+# Start MariaDB
+
+# CMD service mysql restart && tail -F /var/log/mysql/error.log
+
+CMD ["mysqld_safe"]
+
+EXPOSE 3306

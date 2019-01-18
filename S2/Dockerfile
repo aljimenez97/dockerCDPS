@@ -24,7 +24,7 @@ ENV DATABASE_URL=mysql://quiz:xxxx@20.2.4.31:3306/quiz
 
 WORKDIR /quiz_2019/views
 
-RUN cat index.ejs | sed 's/.*Quiz.*/Quiz on S1./' > index2.ejs
+RUN cat index.ejs | sed 's/.*Quiz.*/Quiz on S2./' > index2.ejs
 RUN rm index.ejs
 RUN mv index2.ejs index.ejs
 

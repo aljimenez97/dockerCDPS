@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 services:
   c1:
     build: ./CX  #use local version
@@ -6,6 +6,8 @@ services:
     networks:
       client-fw:
         ipv4_address: "20.2.1.11"
+      client-lb:
+        ipv4_address: "20.2.0.2"
   fw:
     build: ./FW  #use local version
     container_name: "fw"
@@ -17,16 +19,23 @@ services:
   lb:
     build: ./LB  #use local version
     container_name: "lb"
+    ports:
+      - "3000:80"
+    depends_on:
+      - s1
+      - s2
+      - s3
+      - s4
     networks:
+      client-lb:
+        ipv4_address: "20.2.0.1"
       fw-lb:
         ipv4_address: "20.2.2.2"
       lb-server:
         ipv4_address: "20.2.3.1"
   s1:
-    build: ./SX  #use local version
+    build: ./S1  #use local version
     container_name: "s1"
-    depends_on:
-      - bd
     networks:
       lb-server:
         ipv4_address: "20.2.3.11"
@@ -34,15 +43,54 @@ services:
         ipv4_address: "20.2.4.11"
     volumes:
       - nas:/quiz_2019/public/uploads
+  s2:
+    build: ./S2  #use local version
+    container_name: "s2"
+    networks:
+      lb-server:
+        ipv4_address: "20.2.3.12"
+      server-bd:
+        ipv4_address: "20.2.4.12"
+    volumes:
+      - nas:/quiz_2019/public/uploads
+  s3:
+    build: ./S3  #use local version
+    container_name: "s3"
+    networks:
+      lb-server:
+        ipv4_address: "20.2.3.13"
+      server-bd:
+        ipv4_address: "20.2.4.13"
+    volumes:
+      - nas:/quiz_2019/public/uploads
+  s4:
+    build: ./S4  #use local version
+    container_name: "s4"
+    networks:
+      lb-server:
+        ipv4_address: "20.2.3.14"
+      server-bd:
+        ipv4_address: "20.2.4.14"
+    volumes:
+      - nas:/quiz_2019/public/uploads            
   bd:
     build: ./BD  #use local version
     container_name: "bd"
+    healthcheck:
+        test: "/usr/bin/mysql --user=quiz --password=xxxx --execute \"SHOW DATABASES;\""
+        interval: 2s
+        timeout: 20s
+        retries: 10
     networks:
       server-bd:
         ipv4_address: "20.2.4.31"
-    ports:
-      - "3306:3306"
 networks:
+  client-lb:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 20.2.0.0/24
+         gateway: 20.2.0.70
   client-fw:
     driver: bridge
     ipam:

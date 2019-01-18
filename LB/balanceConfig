@@ -1,0 +1,13 @@
+
+frontend lb 
+	bind *:80
+	mode http
+	default_backend webservers
+
+backend webservers
+	mode http
+	balance roundrobin
+	server s1 20.2.3.11:3000 check
+	server s2 20.2.3.12:3000 check
+	server s3 20.2.3.13:3000 check
+	server s4 20.2.3.14:3000 check
