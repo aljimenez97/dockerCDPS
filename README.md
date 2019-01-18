@@ -53,7 +53,7 @@ lb:
 ```
 This will load the quiz server containers before launching the load balancer.
 
-**Service synchronization** is achieved by running checking script as entrypoints of those containers that need a service to work. For instance, the quiz server Dockerfile defines: 
+**Service synchronization** is achieved by running checking scripts as entrypoints of those containers that need a service to work. For instance, the quiz server Dockerfile defines: 
 ```
 # Copy script
 COPY docker-entrypoint.sh /opt/docker-entrypoint.sh
@@ -61,6 +61,25 @@ RUN chmod 755 /opt/docker-entrypoint.sh
 
 ENTRYPOINT ["/opt/docker-entrypoint.sh"]
 ```
+
+And the content of that script is
+```
+#!/bin/bash
+
+echo "ENTRYPOINT"
+until nc -z -v -w30 20.2.4.31 3306 > /dev/null 2>&1
+do
+	echo "Waiting for db connection..."
+	sleep 2
+done
+
+echo "is working"
+
+npm run-script migrate_cdps
+npm run-script seed_cdps
+npm run-script start_old
+```
+It ensures the database is reachable and running and after that migrates and seeds it and it finally starts the server.
 
 ### Docker ephemeral philosophy 
 Docker containers are designed to be ephemeral. This implies that they can be stopped and destroyed and then substituted by another container. In the case of our Dockerfiles, we noticed that some machines, such as the clients, exited as soon as *docker-compose up* command finished. This was due to the lack of an *ENTRYPOINT* or *CMD* being executed in the foreground that kept the machine running. **This is Docker expected behaviour**. We forced the client container to keep running by adding a *sleep* command in the Dockerfile
