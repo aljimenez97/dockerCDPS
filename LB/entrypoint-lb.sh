@@ -18,7 +18,7 @@ echo "S1 ON"
 
 until nc -z -v -w30 20.2.3.12 3000 > /dev/null 2>&1
 do
-	echo "Waiting for S1 connection..."
+	echo "Waiting for S2 connection..."
 	sleep 2
 done
 
@@ -26,7 +26,7 @@ echo "S2 ON"
 
 until nc -z -v -w30 20.2.3.13 3000 > /dev/null 2>&1
 do
-	echo "Waiting for S1 connection..."
+	echo "Waiting for S3 connection..."
 	sleep 2
 done
 
@@ -34,7 +34,7 @@ echo "S3 ON"
 
 until nc -z -v -w30 20.2.3.14 3000 > /dev/null 2>&1
 do
-	echo "Waiting for S1 connection..."
+	echo "Waiting for S4 connection..."
 	sleep 2
 done
 

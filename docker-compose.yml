@@ -4,16 +4,12 @@ services:
     build: ./CX  #use local version
     container_name: "c1"
     networks:
-      client-fw:
-        ipv4_address: "20.2.1.11"
       client-lb:
         ipv4_address: "20.2.0.2"
   fw:
     build: ./FW  #use local version
     container_name: "fw"
     networks:
-      client-fw:
-        ipv4_address: "20.2.1.1"
       fw-lb:
         ipv4_address: "20.2.2.1"
   lb:
@@ -91,12 +87,6 @@ networks:
      config:
        - subnet: 20.2.0.0/24
          gateway: 20.2.0.70
-  client-fw:
-    driver: bridge
-    ipam:
-     config:
-       - subnet: 20.2.1.0/24
-         gateway: 20.2.1.70
   fw-lb:
     driver: bridge
     ipam:
